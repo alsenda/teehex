@@ -22,11 +22,14 @@ export async function initializePostgresSchema(input: {
     max: input.maxConnections ?? 1
   });
 
-  const currentFilePath = fileURLToPath(import.meta.url);
-  const currentDirPath = dirname(currentFilePath);
-  const sqlPath = join(currentDirPath, "init.sql");
-  const migrationSql = readFileSync(sqlPath, "utf8");
+  try {
+    const currentFilePath = fileURLToPath(import.meta.url);
+    const currentDirPath = dirname(currentFilePath);
+    const sqlPath = join(currentDirPath, "init.sql");
+    const migrationSql = readFileSync(sqlPath, "utf8");
 
-  await sql.unsafe(migrationSql);
-  await sql.end();
+    await sql.unsafe(migrationSql);
+  } finally {
+    await sql.end();
+  }
 }

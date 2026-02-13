@@ -1,7 +1,20 @@
 import Database from "better-sqlite3";
+import { mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 import type { Todo, TodoId } from "../../../base/src/core/domain/todo";
 import { createTodoTitle } from "../../../base/src/core/domain/todo-title";
 import type { TodoRepo } from "../../../base/src/core/ports/todo-repo";
+
+const SQLITE_SCHEMA_SQL = `
+CREATE TABLE IF NOT EXISTS todos (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  done INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_todos_created_at ON todos(created_at DESC);
+`;
 
 type TodoRow = {
   id: string;
@@ -20,7 +33,9 @@ function mapRow(row: TodoRow): Todo {
 }
 
 export function createSqliteTodoRepo(input: { dbFilePath: string }): TodoRepo {
+  mkdirSync(dirname(input.dbFilePath), { recursive: true });
   const db = new Database(input.dbFilePath);
+  db.exec(SQLITE_SCHEMA_SQL);
 
   const listStmt = db.prepare(
     "SELECT id, title, done, created_at FROM todos ORDER BY created_at DESC"
