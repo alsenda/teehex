@@ -13,3 +13,4 @@ Defines template metadata and source registry used by installer commands.
 ## Included templates
 
 - `base`: canonical hexagonal core skeleton with Todo example under `base/src/core`.
+- `backend-vercel`: Vercel Functions backend wiring in `backend-vercel/api` + `backend-vercel/src/adapters`.
