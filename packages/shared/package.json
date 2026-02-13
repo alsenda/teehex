@@ -1,0 +1,21 @@
+{
+  "name": "@teehex/shared",
+  "version": "0.1.0",
+  "description": "Shared tiny utilities for teehex monorepo",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "node -e \"import('node:fs').then(fs=>fs.rmSync('dist',{recursive:true,force:true}))\""
+  }
+}
