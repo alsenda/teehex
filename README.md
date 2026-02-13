@@ -56,6 +56,39 @@ Legend:
 | Worker | Browser Web Worker + Node worker_threads protocol | Supported now | Shared worker contract and `cpuSpin` task scaffolded. |
 | Adapter catalog | DB adapter templates (`adapters/db`) | Supported partially | Template assets available; not all providers wired as generated options. |
 
+## Using the CLI
+
+### From npm (recommended)
+
+```bash
+npx create-hexagon-ts my-app
+```
+
+Alias (same CLI):
+
+```bash
+npx teehex my-app
+```
+
+The CLI then prompts for:
+
+1. Frontend framework
+2. UI overlay
+3. Backend
+4. DB adapter
+5. Workers on/off
+6. Git init + initial commit
+
+### From this repository (local dev)
+
+```bash
+corepack pnpm -w install
+corepack pnpm -w -r build
+corepack pnpm --filter create-hexagon-ts exec create-hexagon-ts my-app
+```
+
+If `pnpm` is not recognized on Windows, keep using `corepack pnpm ...` exactly as shown.
+
 ## Development
 
 ### Prerequisites
