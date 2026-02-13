@@ -5,6 +5,7 @@ Vercel-first backend template that wires hexagonal core use cases through adapte
 ## Responsibility
 
 - Exposes Vercel Functions in `api`.
+- Exposes a credential-free local dev API runner in `scripts/dev-api.ts`.
 - Wires core use cases to ports using runtime adapters.
 - Ships with zero external runtime dependencies.
 
