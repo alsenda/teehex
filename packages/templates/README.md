@@ -32,3 +32,9 @@ Defines template metadata and source registry used by installer commands.
 - `overlays/bootstrap/vite`: optional Bootstrap injector.
 - `overlays/daisyui/vite`: optional DaisyUI injector.
 - Heavy-but-available (planned docs only): MUI, Chakra UI.
+
+## Adapter templates
+
+- `adapters/db/in-memory`: baseline zero-dependency `TodoRepo`.
+- `adapters/db/sqlite`: `better-sqlite3` prepared-statement `TodoRepo`.
+- `adapters/db/postgres`: `postgres` (postgres.js) `TodoRepo`.
