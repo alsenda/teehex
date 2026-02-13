@@ -61,38 +61,54 @@ Legend:
 ### Prerequisites
 
 - Node.js 20+
-- pnpm 9+
+- pnpm 9+ (or Corepack)
+
+### Quick start (cross-platform, recommended)
+
+If `pnpm` is not recognized (common on Windows), use Corepack-managed pnpm:
+
+```bash
+corepack prepare pnpm@9.15.4 --activate
+corepack pnpm -w install
+corepack pnpm -w -r build
+```
+
+### Windows notes
+
+- If `pnpm` is still not found after activation, run commands with `corepack pnpm ...`.
+- On some Windows setups, `corepack enable` may fail with permissions under `C:\Program Files\nodejs`.
+   - In that case, **skip** `corepack enable` and use `corepack pnpm ...` directly.
 
 ### Install
 
 ```bash
-pnpm -w install
+corepack pnpm -w install
 ```
 
 ### Build all packages
 
 ```bash
-pnpm -w -r build
+corepack pnpm -w -r build
 ```
 
 ### Lint
 
 ```bash
-pnpm -w lint
+corepack pnpm -w lint
 ```
 
 ## Release process (manual for now)
 
 1. Ensure working tree is clean.
 2. Run install, lint, and build:
-   - `pnpm -w install`
-   - `pnpm -w lint`
-   - `pnpm -w -r build`
+   - `corepack pnpm -w install`
+   - `corepack pnpm -w lint`
+   - `corepack pnpm -w -r build`
 3. Bump versions in package manifests as needed.
 4. Create a descriptive git commit and tag:
    - `git tag vX.Y.Z`
 5. Publish the CLI package:
-   - `pnpm --filter @teehex/cli publish --access public`
+   - `corepack pnpm --filter @teehex/cli publish --access public`
 
 ## Public APIs
 
