@@ -371,7 +371,7 @@ function buildContainerFile(options: InstallerOptions): string {
     "  type IdPort,",
     "  type LoggerPort,",
     "  type TodoRepo",
-    "} from \"../../core\";",
+    "} from \"../core\";",
     "import { systemClock } from \"../adapters/system/clock\";",
     "import { cryptoId } from \"../adapters/system/id\";",
     "import { consoleLogger } from \"../adapters/system/logger\";"
