@@ -1,0 +1,14 @@
+{
+  "id": "daisyui-vite",
+  "uiKit": "daisyui",
+  "target": "vite",
+  "strategy": "injector",
+  "copy": [
+    { "from": "files/tailwind.config.ts", "to": "tailwind.config.ts" },
+    { "from": "files/postcss.config.cjs", "to": "postcss.config.cjs" },
+    { "from": "files/src/styles.overlay.css", "to": "src/styles.overlay.css" },
+    { "from": "files/src/neobrutalist-theme.css", "to": "src/neobrutalist-theme.css" },
+    { "from": "files/src/neobrutalist-ui.css", "to": "src/neobrutalist-ui.css" }
+  ],
+  "merge": [{ "from": "package.additions.json", "to": "package.json" }]
+}

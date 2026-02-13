@@ -1,0 +1,13 @@
+{
+  "id": "bootstrap-vite",
+  "uiKit": "bootstrap",
+  "target": "vite",
+  "strategy": "injector",
+  "copy": [
+    { "from": "files/vite.bootstrap.config.ts", "to": "vite.bootstrap.config.ts" },
+    { "from": "files/src/styles.overlay.css", "to": "src/styles.overlay.css" },
+    { "from": "files/src/neobrutalist-theme.css", "to": "src/neobrutalist-theme.css" },
+    { "from": "files/src/neobrutalist-ui.css", "to": "src/neobrutalist-ui.css" }
+  ],
+  "merge": [{ "from": "package.additions.json", "to": "package.json" }]
+}

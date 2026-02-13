@@ -25,3 +25,10 @@ Defines template metadata and source registry used by installer commands.
 ## Frontend style baseline
 
 - `frontend-style-canonical.css`: canonical neobrutalist stylesheet that all implemented frontend templates mirror exactly.
+
+## Overlay injectors
+
+- `overlays/tailwind/vite`: optional Tailwind injector.
+- `overlays/bootstrap/vite`: optional Bootstrap injector.
+- `overlays/daisyui/vite`: optional DaisyUI injector.
+- Heavy-but-available (planned docs only): MUI, Chakra UI.
