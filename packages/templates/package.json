@@ -12,7 +12,20 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "base",
+    "backend-vercel",
+    "frontend-angular",
+    "frontend-ember",
+    "frontend-preact",
+    "frontend-react",
+    "frontend-solid",
+    "frontend-svelte",
+    "frontend-style-canonical.css",
+    "frontend-vue",
+    "overlays",
+    "adapters"
   ],
   "scripts": {
     "build": "tsc -b",

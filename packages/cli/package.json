@@ -1,9 +1,10 @@
 {
-  "name": "@teehex/cli",
+  "name": "create-hexagon-ts",
   "version": "0.1.0",
   "description": "CLI installer for teehex templates",
   "type": "module",
   "bin": {
+    "create-hexagon-ts": "./dist/index.js",
     "teehex": "./dist/index.js"
   },
   "main": "./dist/index.js",
