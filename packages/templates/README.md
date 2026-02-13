@@ -21,3 +21,7 @@ Defines template metadata and source registry used by installer commands.
 - `frontend-preact`: Preact + Vite frontend template.
 - `frontend-angular`: planned only.
 - `frontend-ember`: planned only.
+
+## Frontend style baseline
+
+- `frontend-style-canonical.css`: canonical neobrutalist stylesheet that all implemented frontend templates mirror exactly.

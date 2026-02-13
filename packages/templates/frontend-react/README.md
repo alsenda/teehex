@@ -21,3 +21,7 @@ Provides a minimal React UI for Todo list/add/toggle and a browser Worker heavy-
 ## Tailwind readiness
 
 Base styling is plain CSS. Tailwind can be added later by installing Tailwind and replacing classes incrementally without changing app logic.
+
+## Style parity
+
+`src/styles.css` is intentionally kept identical across all frontend templates and mirrors `packages/templates/frontend-style-canonical.css`.

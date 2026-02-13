@@ -21,3 +21,7 @@ Provides a minimal Vue UI for Todo list/add/toggle and a browser Worker heavy-ta
 ## Tailwind readiness
 
 Base styling is plain CSS. Tailwind can be layered in later without changing component logic.
+
+## Style parity
+
+`src/styles.css` is intentionally kept identical across all frontend templates and mirrors `packages/templates/frontend-style-canonical.css`.
