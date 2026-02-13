@@ -1,6 +1,6 @@
-import type { Todo, TodoId } from "../../../core/domain/todo";
-import type { TodoRepo } from "../../../core/ports/todo-repo";
-import { toggleTodoState } from "../../../core/domain/todo";
+import type { Todo, TodoId } from "../../core/domain/todo";
+import type { TodoRepo } from "../../core/ports/todo-repo";
+import { toggleTodoState } from "../../core/domain/todo";
 
 export function createInMemoryTodoRepo(seed: readonly Todo[] = []): TodoRepo {
   const todosById = new Map<TodoId, Todo>();

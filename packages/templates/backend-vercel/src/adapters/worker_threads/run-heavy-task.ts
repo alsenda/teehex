@@ -1,5 +1,5 @@
 import { Worker } from "node:worker_threads";
-import type { WorkerTaskRequest, WorkerTaskResult } from "../../../core/ports/worker-task";
+import type { WorkerTaskRequest, WorkerTaskResult } from "../../core/ports/worker-task";
 
 export type WorkerAdapter = {
   runCpuSpin: (iterations: number) => Promise<WorkerTaskResult>;

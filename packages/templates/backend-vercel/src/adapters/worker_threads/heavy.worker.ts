@@ -1,25 +1,19 @@
 import { performance } from "node:perf_hooks";
 import { parentPort, workerData } from "node:worker_threads";
-import type { WorkerTaskRequest, WorkerTaskResult } from "../../../core/ports/worker-task";
+import type { WorkerTaskRequest, WorkerTaskResult } from "../../core/ports/worker-task";
 
 const request = workerData as WorkerTaskRequest;
 const startedAt = performance.now();
 
-function finalize(result: Omit<WorkerTaskResult, "durationMs">): WorkerTaskResult {
-  return {
-    ...result,
+if (request.task !== "cpuSpin") {
+  const failure: WorkerTaskResult = {
+    ok: false,
+    task: "cpuSpin",
+    error: "Unsupported worker task",
     durationMs: performance.now() - startedAt
   };
-}
 
-if (request.task !== "cpuSpin") {
-  parentPort?.postMessage(
-    finalize({
-      ok: false,
-      task: "cpuSpin",
-      error: "Unsupported worker task"
-    })
-  );
+  parentPort?.postMessage(failure);
 } else {
   const iterations = request.payload.iterations;
   let checksum = 0;
@@ -28,11 +22,12 @@ if (request.task !== "cpuSpin") {
     checksum = (checksum + ((index * 31) ^ (index >>> 3))) >>> 0;
   }
 
-  parentPort?.postMessage(
-    finalize({
-      ok: true,
-      task: "cpuSpin",
-      checksum
-    })
-  );
+  const success: WorkerTaskResult = {
+    ok: true,
+    task: "cpuSpin",
+    checksum,
+    durationMs: performance.now() - startedAt
+  };
+
+  parentPort?.postMessage(success);
 }

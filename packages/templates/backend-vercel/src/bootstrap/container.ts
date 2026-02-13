@@ -6,7 +6,7 @@ import {
   type IdPort,
   type LoggerPort,
   type TodoRepo
-} from "../../core";
+} from "../core";
 import { createTodoRepo, type TodoRepoProvider } from "../adapters/persistence/create-todo-repo";
 import { systemClock } from "../adapters/system/clock";
 import { cryptoId } from "../adapters/system/id";

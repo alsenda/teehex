@@ -1,4 +1,4 @@
-import type { TodoRepo } from "../../../core/ports/todo-repo";
+import type { TodoRepo } from "../../core/ports/todo-repo";
 import { createDbTodoRepoPlaceholder } from "./db-todo-repo-placeholder";
 import { createInMemoryTodoRepo } from "./in-memory-todo-repo";
 

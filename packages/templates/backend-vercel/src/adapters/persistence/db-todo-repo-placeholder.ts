@@ -1,5 +1,5 @@
-import type { Todo, TodoId } from "../../../core/domain/todo";
-import type { TodoRepo } from "../../../core/ports/todo-repo";
+import type { Todo, TodoId } from "../../core/domain/todo";
+import type { TodoRepo } from "../../core/ports/todo-repo";
 
 export function createDbTodoRepoPlaceholder(): TodoRepo {
   return {

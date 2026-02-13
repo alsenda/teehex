@@ -483,13 +483,13 @@ function buildRootPackageJson(options: InstallerOptions): Record<string, unknown
     type: "module",
     workspaces: ["web"],
     scripts: {
-      build: "pnpm build:api && pnpm build:web",
+      build: "npm run build:api && npm run build:web",
       "build:api": "tsc -p tsconfig.json --noEmit",
-      "build:web": "pnpm --dir web build",
-      dev: "concurrently -k -n api,web -c cyan,magenta \"pnpm dev:api\" \"pnpm dev:web\"",
-      "dev:api": "pnpm exec vercel dev --listen 3000",
-      "dev:web": "pnpm --dir web dev",
-      "dev:vercel": "pnpm exec vercel dev --listen 3000"
+      "build:web": "npm --workspace web run build",
+      dev: "concurrently -k -n api,web -c cyan,magenta \"npm run dev:api\" \"npm run dev:web\"",
+      "dev:api": "vercel dev --listen 3000",
+      "dev:web": "npm --workspace web run dev",
+      "dev:vercel": "vercel dev --listen 3000"
     },
     devDependencies: {
       "@types/node": "^22.13.10",
@@ -504,8 +504,8 @@ function buildTsConfig(): Record<string, unknown> {
   return {
     compilerOptions: {
       target: "ES2022",
-      module: "NodeNext",
-      moduleResolution: "NodeNext",
+      module: "ESNext",
+      moduleResolution: "Bundler",
       strict: true,
       noEmit: true,
       types: ["node"],
