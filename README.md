@@ -58,7 +58,19 @@ Legend:
 
 ## Using the CLI
 
-### From npm (recommended)
+### From this repository (current, works now)
+
+The package is not published to npm yet, so `npx create-hexagon-ts ...` will return `E404` until first publish.
+
+```bash
+corepack pnpm -w install
+corepack pnpm -w -r build
+corepack pnpm --filter create-hexagon-ts exec create-hexagon-ts my-app
+```
+
+If `pnpm` is not recognized on Windows, keep using `corepack pnpm ...` exactly as shown.
+
+### From npm (after publish)
 
 ```bash
 npx create-hexagon-ts my-app
@@ -78,16 +90,6 @@ The CLI then prompts for:
 4. DB adapter
 5. Workers on/off
 6. Git init + initial commit
-
-### From this repository (local dev)
-
-```bash
-corepack pnpm -w install
-corepack pnpm -w -r build
-corepack pnpm --filter create-hexagon-ts exec create-hexagon-ts my-app
-```
-
-If `pnpm` is not recognized on Windows, keep using `corepack pnpm ...` exactly as shown.
 
 ## Development
 
@@ -141,7 +143,7 @@ corepack pnpm -w lint
 4. Create a descriptive git commit and tag:
    - `git tag vX.Y.Z`
 5. Publish the CLI package:
-   - `corepack pnpm --filter @teehex/cli publish --access public`
+   - `corepack pnpm --filter create-hexagon-ts publish --access public`
 
 ## Public APIs
 
