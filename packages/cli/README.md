@@ -17,6 +17,18 @@ Provides the `create-hexagon-ts` installer and orchestrates template selection +
 npx create-hexagon-ts my-app
 ```
 
+From the monorepo root (local development):
+
+```bash
+npm run create -- my-app
+```
+
+Without prebuilding CLI dist:
+
+```bash
+npm run create:dev -- my-app
+```
+
 ## Prompt matrix
 
 1. Frontend framework

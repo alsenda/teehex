@@ -10,7 +10,9 @@
   "scripts": {
     "build": "tsc -b",
     "clean": "tsc -b --clean",
-    "lint": "biome check ."
+    "lint": "biome check .",
+    "create": "corepack pnpm -C packages/cli exec tsx index.ts",
+    "create:dev": "corepack pnpm -C packages/cli exec tsx index.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

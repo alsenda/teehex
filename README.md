@@ -68,6 +68,18 @@ corepack pnpm -w -r build
 corepack pnpm --filter create-hexagon-ts exec create-hexagon-ts my-app
 ```
 
+Shortcuts via npm scripts (easier):
+
+```bash
+npm run create -- my-app
+```
+
+Or run directly from TypeScript source:
+
+```bash
+npm run create:dev -- my-app
+```
+
 If `pnpm` is not recognized on Windows, keep using `corepack pnpm ...` exactly as shown.
 
 ### From npm (after publish)
