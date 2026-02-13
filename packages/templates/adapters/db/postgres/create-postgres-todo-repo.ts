@@ -1,4 +1,7 @@
 import postgres from "postgres";
+import { PGlite } from "@electric-sql/pglite";
+import { mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 import type { Todo, TodoId } from "../../../base/src/core/domain/todo";
 import { createTodoTitle } from "../../../base/src/core/domain/todo-title";
 import type { TodoRepo } from "../../../base/src/core/ports/todo-repo";
@@ -39,65 +42,116 @@ function mapRow(row: TodoRow): Todo {
 }
 
 export function createPostgresTodoRepo(input: {
-  databaseUrl: string;
+  databaseUrl?: string;
+  localDbPath?: string;
   ssl?: "require" | "disable";
   maxConnections?: number;
 }): TodoRepo {
-  const sql = postgres(input.databaseUrl, {
-    prepare: true,
-    ssl: resolveSslMode(input.ssl),
-    max: input.maxConnections ?? 1
-  });
+  const databaseUrl = input.databaseUrl?.trim();
 
-  const schemaReady = sql.unsafe(POSTGRES_SCHEMA_SQL);
+  if (databaseUrl !== undefined && databaseUrl.length > 0) {
+    const sql = postgres(databaseUrl, {
+      prepare: true,
+      ssl: resolveSslMode(input.ssl),
+      max: input.maxConnections ?? 1
+    });
+
+    const schemaReady = sql.unsafe(POSTGRES_SCHEMA_SQL);
+
+    return {
+      async list() {
+        await schemaReady;
+        const rows = await sql<TodoRow[]>`
+          SELECT id, title, done, created_at
+          FROM todos
+          ORDER BY created_at DESC
+        `;
+
+        return rows.map(mapRow);
+      },
+      async get(id: TodoId) {
+        await schemaReady;
+        const rows = await sql<TodoRow[]>`
+          SELECT id, title, done, created_at
+          FROM todos
+          WHERE id = ${id}
+          LIMIT 1
+        `;
+
+        if (rows.length === 0) {
+          return null;
+        }
+
+        return mapRow(rows[0]);
+      },
+      async create(todo: Todo) {
+        await schemaReady;
+        await sql`
+          INSERT INTO todos (id, title, done, created_at)
+          VALUES (${todo.id}, ${todo.title.value}, ${todo.done}, ${todo.createdAt.toISOString()})
+        `;
+      },
+      async toggleDone(id: TodoId) {
+        await schemaReady;
+        const rows = await sql<TodoRow[]>`
+          UPDATE todos
+          SET done = NOT done
+          WHERE id = ${id}
+          RETURNING id, title, done, created_at
+        `;
+
+        if (rows.length === 0) {
+          return null;
+        }
+
+        return mapRow(rows[0]);
+      }
+    };
+  }
+
+  const localDbPath = input.localDbPath ?? "./data/pglite";
+  mkdirSync(dirname(localDbPath), { recursive: true });
+  const db = new PGlite(localDbPath);
+  const schemaReady = db.exec(POSTGRES_SCHEMA_SQL);
 
   return {
     async list() {
       await schemaReady;
-      const rows = await sql<TodoRow[]>`
-        SELECT id, title, done, created_at
-        FROM todos
-        ORDER BY created_at DESC
-      `;
-
-      return rows.map(mapRow);
+      const result = await db.query<TodoRow>(
+        "SELECT id, title, done, created_at FROM todos ORDER BY created_at DESC"
+      );
+      return result.rows.map(mapRow);
     },
     async get(id: TodoId) {
       await schemaReady;
-      const rows = await sql<TodoRow[]>`
-        SELECT id, title, done, created_at
-        FROM todos
-        WHERE id = ${id}
-        LIMIT 1
-      `;
-
-      if (rows.length === 0) {
+      const result = await db.query<TodoRow>(
+        "SELECT id, title, done, created_at FROM todos WHERE id = $1 LIMIT 1",
+        [id]
+      );
+      if (result.rows.length === 0) {
         return null;
       }
 
-      return mapRow(rows[0]);
+      return mapRow(result.rows[0]);
     },
     async create(todo: Todo) {
       await schemaReady;
-      await sql`
-        INSERT INTO todos (id, title, done, created_at)
-        VALUES (${todo.id}, ${todo.title.value}, ${todo.done}, ${todo.createdAt.toISOString()})
-      `;
+      await db.query(
+        "INSERT INTO todos (id, title, done, created_at) VALUES ($1, $2, $3, $4)",
+        [todo.id, todo.title.value, todo.done, todo.createdAt.toISOString()]
+      );
     },
     async toggleDone(id: TodoId) {
       await schemaReady;
-      const rows = await sql<TodoRow[]>`
-        UPDATE todos
-        SET done = NOT done
-        WHERE id = ${id}
-        RETURNING id, title, done, created_at
-      `;
-
-      if (rows.length === 0) {
+      const result = await db.query<TodoRow>(
+        "UPDATE todos SET done = NOT done WHERE id = $1 RETURNING id, title, done, created_at",
+        [id]
+      );
+      if (result.rows.length === 0) {
         return null;
       }
 
-      return mapRow(rows[0]);
+      return mapRow(result.rows[0]);
     }
   };
 }
