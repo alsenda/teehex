@@ -1,14 +1,11 @@
 <script lang="ts">
+  import type { WorkerTaskRequest, WorkerTaskResult } from "../../src/core/ports/worker-task";
+
   type Todo = {
     id: string;
     title: string;
     done: boolean;
     createdAt: string;
-  };
-
-  type HeavyResult = {
-    checksum: number;
-    durationMs: number;
   };
 
   let todos: Todo[] = [];
@@ -77,14 +74,23 @@
         type: "module"
       });
 
-      const result = await new Promise<HeavyResult>((resolve, reject) => {
-        worker.onmessage = (event: MessageEvent<HeavyResult>) => resolve(event.data);
+      const request: WorkerTaskRequest = {
+        task: "cpuSpin",
+        payload: { iterations: 8_000_000 }
+      };
+
+      const result = await new Promise<WorkerTaskResult>((resolve, reject) => {
+        worker.onmessage = (event: MessageEvent<WorkerTaskResult>) => resolve(event.data);
         worker.onerror = () => reject(new Error("Worker failed"));
-        worker.postMessage({ iterations: 8_000_000 });
+        worker.postMessage(request);
       });
 
       worker.terminate();
-      heavyDuration = result.durationMs;
+      if (!result.ok) {
+        throw new Error(result.error);
+      }
+
+      heavyDuration = Math.round(result.durationMs);
     } finally {
       busy = false;
     }

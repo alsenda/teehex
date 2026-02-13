@@ -23,10 +23,21 @@ export default async function handler(request: ApiRequest, response: ApiResponse
 
   const iterations = parseIterations(request.query?.iterations);
   const container = getContainer();
-  const result = await container.adapters.worker.runChecksumTask(iterations);
+  const result = await container.adapters.worker.runCpuSpin(iterations);
+
+  if (!result.ok) {
+    sendJson(response, 500, {
+      ok: false,
+      task: result.task,
+      error: result.error,
+      durationMs: result.durationMs
+    });
+    return;
+  }
 
   sendJson(response, 200, {
     ok: true,
+    task: result.task,
     iterations,
     checksum: result.checksum,
     durationMs: result.durationMs

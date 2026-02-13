@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import type { WorkerTaskRequest, WorkerTaskResult } from "../../src/core/ports/worker-task";
 
 type Todo = {
   id: string;
   title: string;
   done: boolean;
   createdAt: string;
-};
-
-type HeavyResult = {
-  checksum: number;
-  durationMs: number;
 };
 
 const todos = ref<Todo[]>([]);
@@ -84,14 +80,23 @@ async function runHeavyTask(): Promise<void> {
       type: "module"
     });
 
-    const result = await new Promise<HeavyResult>((resolve, reject) => {
-      worker.onmessage = (event: MessageEvent<HeavyResult>) => resolve(event.data);
+    const request: WorkerTaskRequest = {
+      task: "cpuSpin",
+      payload: { iterations: 8_000_000 }
+    };
+
+    const result = await new Promise<WorkerTaskResult>((resolve, reject) => {
+      worker.onmessage = (event: MessageEvent<WorkerTaskResult>) => resolve(event.data);
       worker.onerror = () => reject(new Error("Worker failed"));
-      worker.postMessage({ iterations: 8_000_000 });
+      worker.postMessage(request);
     });
 
     worker.terminate();
-    heavyDuration.value = result.durationMs;
+    if (!result.ok) {
+      throw new Error(result.error);
+    }
+
+    heavyDuration.value = Math.round(result.durationMs);
   } finally {
     busy.value = false;
   }

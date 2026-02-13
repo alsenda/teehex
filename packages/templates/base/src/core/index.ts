@@ -7,6 +7,13 @@ export type { ClockPort } from "./ports/clock";
 export type { IdPort } from "./ports/id";
 export type { LoggerPort } from "./ports/logger";
 export type { TodoRepo } from "./ports/todo-repo";
+export type {
+	WorkerTaskName,
+	WorkerTaskRequest,
+	WorkerTaskResult,
+	WorkerTaskSuccess,
+	WorkerTaskFailure
+} from "./ports/worker-task";
 
 export type { ListTodosDeps } from "./usecases/list-todos";
 export { listTodos } from "./usecases/list-todos";

@@ -1,23 +1,24 @@
 import { Worker } from "node:worker_threads";
-
-export type HeavyTaskResult = {
-  checksum: number;
-  durationMs: number;
-};
+import type { WorkerTaskRequest, WorkerTaskResult } from "../../../core/ports/worker-task";
 
 export type WorkerAdapter = {
-  runChecksumTask: (iterations: number) => Promise<HeavyTaskResult>;
+  runCpuSpin: (iterations: number) => Promise<WorkerTaskResult>;
 };
 
 export function createWorkerAdapter(): WorkerAdapter {
   return {
-    runChecksumTask: (iterations) =>
-      new Promise<HeavyTaskResult>((resolve, reject) => {
+    runCpuSpin: (iterations) =>
+      new Promise<WorkerTaskResult>((resolve, reject) => {
+        const request: WorkerTaskRequest = {
+          task: "cpuSpin",
+          payload: { iterations }
+        };
+
         const worker = new Worker(new URL("./heavy.worker.js", import.meta.url), {
-          workerData: { iterations }
+          workerData: request
         });
 
-        worker.once("message", (result: HeavyTaskResult) => {
+        worker.once("message", (result: WorkerTaskResult) => {
           resolve(result);
         });
 

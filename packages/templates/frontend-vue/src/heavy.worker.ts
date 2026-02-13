@@ -1,24 +1,32 @@
-type Input = {
-  iterations: number;
-};
+import type { WorkerTaskRequest, WorkerTaskResult } from "../../src/core/ports/worker-task";
 
-type Output = {
-  checksum: number;
-  durationMs: number;
-};
-
-self.onmessage = (event: MessageEvent<Input>) => {
+self.onmessage = (event: MessageEvent<WorkerTaskRequest>) => {
   const startedAt = performance.now();
-  const iterations = event.data.iterations;
+  const request = event.data;
+
+  if (request.task !== "cpuSpin") {
+    const failure: WorkerTaskResult = {
+      ok: false,
+      task: "cpuSpin",
+      error: "Unsupported worker task",
+      durationMs: performance.now() - startedAt
+    };
+    self.postMessage(failure);
+    return;
+  }
+
+  const iterations = request.payload.iterations;
 
   let checksum = 0;
   for (let index = 0; index < iterations; index += 1) {
-    checksum = (checksum + ((index * 13) ^ (index >>> 2))) >>> 0;
+    checksum = (checksum + ((index * 31) ^ (index >>> 3))) >>> 0;
   }
 
-  const output: Output = {
+  const output: WorkerTaskResult = {
+    ok: true,
+    task: "cpuSpin",
     checksum,
-    durationMs: Math.round(performance.now() - startedAt)
+    durationMs: performance.now() - startedAt
   };
 
   self.postMessage(output);
