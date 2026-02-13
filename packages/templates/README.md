@@ -9,3 +9,7 @@ Defines template metadata and source registry used by installer commands.
 ## Public API
 
 - `TEMPLATES`: readonly list of available template sources.
+
+## Included templates
+
+- `base`: canonical hexagonal core skeleton with Todo example under `base/src/core`.
