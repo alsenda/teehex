@@ -206,8 +206,8 @@ async function fileExists(path: string): Promise<boolean> {
 }
 
 function getTemplatesRoot(): string {
-  const packageJsonPath = require.resolve("@teehex/templates/package.json");
-  return dirname(packageJsonPath);
+  const templatesEntrypoint = require.resolve("@teehex/templates");
+  return dirname(dirname(templatesEntrypoint));
 }
 
 function getFrontendTemplateFolder(frontend: FrontendSelection): string {
