@@ -3,6 +3,7 @@
 import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
 import { readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { existsSync, readFileSync } from "node:fs";
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
 import { spawnSync } from "node:child_process";
@@ -207,7 +208,33 @@ async function fileExists(path: string): Promise<boolean> {
 
 function getTemplatesRoot(): string {
   const templatesEntrypoint = require.resolve("@teehex/templates");
-  return dirname(dirname(templatesEntrypoint));
+  let currentDir = dirname(templatesEntrypoint);
+
+  while (true) {
+    const packageJsonPath = join(currentDir, "package.json");
+
+    if (existsSync(packageJsonPath)) {
+      try {
+        const parsed = JSON.parse(readFileSync(packageJsonPath, "utf8")) as {
+          name?: string;
+        };
+
+        if (parsed.name === "@teehex/templates") {
+          return currentDir;
+        }
+      } catch {
+      }
+    }
+
+    const parentDir = dirname(currentDir);
+    if (parentDir === currentDir) {
+      break;
+    }
+
+    currentDir = parentDir;
+  }
+
+  throw new Error("Unable to locate @teehex/templates package root");
 }
 
 function getFrontendTemplateFolder(frontend: FrontendSelection): string {
